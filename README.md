@@ -1,6 +1,6 @@
 ## DLT lab 9
 
-Participants: Salavat Dinmukhametov, Vladimir Shchreba, Nikita Nigmatullin, Igor Krashennikov
+Participants: Salavat Dinmukhametov, Vladimir Shchreba, Nikita Nigmatullin, Igor Krasheninnikov, Nikolai Mikriukov
 
 ## To run
 
