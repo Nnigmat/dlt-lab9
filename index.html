@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <title>Web 3 Demo</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+        <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    </head>
+    <body>
+        Web 3 Demo
+        <br >
+        <input type="text" id="number1"/>
+        <input type="text" id="number2"/>
+
+        <button onclick="getSum();">Sum</button>
+        <button onclick="getDifference();">Difference</button>
+        
+        <button onclick="getMult();">Multiplication</button>
+        <button onclick="getDiv();">Division</button><br /><br />
+        
+        Status: <span id="status">Loading...</span>
+
+        <script  type="text/javascript">
+            async function loadWeb3() {
+                if (window.ethereum) {
+                    window.web3 = new Web3(window.ethereum);
+                    window.ethereum.enable();
+                }
+            }
+
+            async function loadContract() {
+                return await new window.web3.eth.Contract([
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "int256",
+                                "name": "num1",
+                                "type": "int256"
+                            },
+                            {
+                                "internalType": "int256",
+                                "name": "num2",
+                                "type": "int256"
+                            }
+                        ],
+                        "name": "divide",
+                        "outputs": [
+                            {
+                                "internalType": "int256",
+                                "name": "",
+                                "type": "int256"
+                            }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "int256",
+                                "name": "num1",
+                                "type": "int256"
+                            },
+                            {
+                                "internalType": "int256",
+                                "name": "num2",
+                                "type": "int256"
+                            }
+                        ],
+                        "name": "minus",
+                        "outputs": [
+                            {
+                                "internalType": "int256",
+                                "name": "",
+                                "type": "int256"
+                            }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "int256",
+                                "name": "num1",
+                                "type": "int256"
+                            },
+                            {
+                                "internalType": "int256",
+                                "name": "num2",
+                                "type": "int256"
+                            }
+                        ],
+                        "name": "multiply",
+                        "outputs": [
+                            {
+                                "internalType": "int256",
+                                "name": "",
+                                "type": "int256"
+                            }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "int256",
+                                "name": "num1",
+                                "type": "int256"
+                            },
+                            {
+                                "internalType": "int256",
+                                "name": "num2",
+                                "type": "int256"
+                            }
+                        ],
+                        "name": "plus",
+                        "outputs": [
+                            {
+                                "internalType": "int256",
+                                "name": "",
+                                "type": "int256"
+                            }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    }
+                ], '0xC073ecd114F43ea30bAd29826Cb7AE9887469046');
+            }
+
+            async function getCurrentAccount() {
+                const accounts = await window.web3.eth.getAccounts();
+                return accounts[0];
+            }
+
+            function getValues() {
+                return [Number(document.getElementById('number1').value), Number(document.getElementById('number2').value)]
+            }
+
+            async function getSum() {
+                const account = await getCurrentAccount();
+                var [val1, val2] = getValues()
+                updateStatus(`fetching sum of ${val1} and ${val2}...`);
+                const coolNumber = await window.contract.methods.plus(val1, val2).send({ from: account });
+                updateStatus(`res: ${coolNumber}`);
+            }
+
+
+            async function getDifference() {
+                const account = await getCurrentAccount();
+                var [val1, val2] = getValues()
+                updateStatus(`fetching difference of ${val1} and ${val2}...`);
+                const coolNumber = await window.contract.methods.minus(val1, val2).send({ from: account });
+                updateStatus(`res: ${coolNumber}`);
+            }
+
+
+            async function getMult() {
+                const account = await getCurrentAccount();
+                var [val1, val2] = getValues()
+                updateStatus(`fetching multiplication of ${val1} and ${val2}...`);
+                const coolNumber = await window.contract.methods.multiply(val1, val2).send({ from: account });
+                updateStatus(`res: ${coolNumber}`);
+            }
+
+
+            async function getDiv() {
+                const account = await getCurrentAccount();
+                var [val1, val2] = getValues()
+                updateStatus(`fetching division of ${val1} and ${val2}...`);
+                const coolNumber = await window.contract.methods.divide(val1, val2).send({ from: account });
+                updateStatus(`res: ${coolNumber}`);
+            }
+
+            async function load() {
+                await loadWeb3();
+                window.contract = await loadContract();
+                updateStatus('Ready!');
+            }
+
+            function updateStatus(status) {
+                const statusEl = document.getElementById('status');
+                statusEl.innerHTML = status;
+                console.log(status);
+            }
+
+            load();
+        </script>
+    </body>
+</html>
